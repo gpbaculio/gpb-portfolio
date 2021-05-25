@@ -13,19 +13,26 @@ function App() {
   useEffect(() => {
     if (canvasRef && canvasRef.current) {
       const canvas = canvasRef.current;
+
       const canvasCtx = canvas.getContext("2d");
+
       canvas.width = window.innerWidth;
+
       canvas.height = window.innerHeight;
+
       let particles: Particle[];
+
       let mouse: CanvasMouseType = {
         x: null,
         y: null,
         radius: (canvas.height / 80) * (canvas.width / 80),
       };
+
       window.addEventListener("mousemove", function (event) {
         mouse.x = event.x;
         mouse.y = event.y;
       });
+
       class Particle {
         x: number;
         y: number;
@@ -48,6 +55,7 @@ function App() {
           this.size = size;
           this.color = color;
         }
+
         // method to draw individual particle
         draw() {
           if (canvasCtx) {
@@ -65,24 +73,31 @@ function App() {
             if (this.x > canvas.width || this.x < 0) {
               this.directionX = -this.directionX;
             }
+
             if (this.y > canvas.height || this.y < 0) {
-              this.directionY = this.directionY;
+              this.directionY = -this.directionY;
             }
 
             // check collision detection - mouse position / particle position
             let dx = mouse.x - this.x;
+
             let dy = mouse.y - this.y;
+
             let distance = Math.sqrt(dx * dx + dy * dy);
+
             if (distance < mouse.radius + this.size) {
               if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
                 this.x += 10;
               }
+
               if (mouse.x > this.x && this.x > this.size * 10) {
                 this.x -= 10;
               }
+
               if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
                 this.y += 10;
               }
+
               if (mouse.y > this.y && this.y > this.size * 10) {
                 this.y -= 10;
               }
@@ -97,6 +112,7 @@ function App() {
           }
         }
       }
+
       const init = () => {
         if (canvas) {
           particles = [];
@@ -119,14 +135,39 @@ function App() {
         }
       };
 
+      // check if particles are close enough to draw lines between them
+      const connect = () => {
+        if (canvasCtx && canvas) {
+          for (let a = 0; a < particles.length; a++) {
+            for (let b = a; b < particles.length; b++) {
+              let distance =
+                (particles[a].x - particles[b].x) *
+                  (particles[a].x - particles[b].x) +
+                (particles[a].y - particles[b].y) *
+                  (particles[a].y - particles[b].y);
+
+              if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                canvasCtx.strokeStyle = "rgba(140, 85, 31,1)";
+                canvasCtx.lineWidth = 1;
+                canvasCtx.beginPath();
+                canvasCtx.moveTo(particles[a].x, particles[a].y);
+                canvasCtx.lineTo(particles[b].x, particles[b].y);
+                canvasCtx.stroke();
+              }
+            }
+          }
+        }
+      };
+
       //animation loop
       const animate = () => {
-        requestAnimationFrame(animate);
         if (canvasCtx) {
+          requestAnimationFrame(animate);
           canvasCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
           for (let i = 0; i < particles.length; i++) {
             particles[i].update();
           }
+          connect();
         }
       };
 
