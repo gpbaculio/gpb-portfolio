@@ -16,7 +16,7 @@ function App() {
       const canvasCtx = canvas.getContext("2d");
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      let particles;
+      let particles: Particle[];
       let mouse: CanvasMouseType = {
         x: null,
         y: null,
@@ -97,16 +97,18 @@ function App() {
           }
         }
       }
-      function init() {
+      const init = () => {
         if (canvas) {
           particles = [];
           let particlesCount = (canvas.height * canvas.width) / 9000;
           for (let i = 0; i < particlesCount; i++) {
             let size = Math.random() * 5 + 1;
             let x =
-              Math.random() * (innerWidth - size * 2 - size * 2) + size * 2;
+              Math.random() * (window.innerWidth - size * 2 - size * 2) +
+              size * 2;
             let y =
-              Math.random() * (innerHeight - size * 2 - size * 2) + size * 2;
+              Math.random() * (window.innerHeight - size * 2 - size * 2) +
+              size * 2;
             let directionX = Math.random() * 5 - 2.5;
             let directionY = Math.random() * 5 - 2.5;
             let color = "#8c5523";
@@ -115,7 +117,19 @@ function App() {
             );
           }
         }
-      }
+      };
+
+      const animate = () => {
+        requestAnimationFrame(animate);
+        if (canvasCtx) {
+          canvasCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+          }
+        }
+      };
+      init();
+      animate();
     }
   }, []);
 
