@@ -11,6 +11,12 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    let onMouseMove: (e: MouseEvent) => void;
+
+    let onResize: () => void;
+
+    let onMouseOut: () => void;
+
     if (canvasRef && canvasRef.current) {
       const canvas = canvasRef.current;
 
@@ -28,10 +34,12 @@ function App() {
         radius: (canvas.height / 80) * (canvas.width / 80),
       };
 
-      window.addEventListener("mousemove", function (event) {
+      onMouseMove = (event: MouseEvent) => {
         mouse.x = event.x;
         mouse.y = event.y;
-      });
+      };
+
+      window.addEventListener("mousemove", onMouseMove);
 
       class Particle {
         x: number;
@@ -173,26 +181,37 @@ function App() {
         }
       };
 
-      window.addEventListener("resize", function () {
+      onResize = () => {
         if (canvas) {
-          canvas.width = this.window.innerWidth;
-          canvas.height = this.window.innerHeight;
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
           mouse.radius = (canvas.height / 80) * (canvas.height / 80);
           init();
-          animate();
         }
-      });
+      };
 
-      window.addEventListener("mouseout", function () {
+      window.addEventListener("resize", onResize);
+
+      onMouseOut = () => {
         if (mouse && mouse.x && mouse.y) {
           mouse.x = 0;
           mouse.y = 0;
         }
-      });
+      };
+
+      window.addEventListener("mouseout", onMouseOut);
 
       init();
       animate();
     }
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+
+      window.removeEventListener("resize", onResize);
+
+      window.removeEventListener("mouseout", onMouseOut);
+    };
   }, []);
 
   return <Canvas1 ref={canvasRef} />;
