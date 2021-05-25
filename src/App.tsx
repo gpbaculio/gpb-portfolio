@@ -171,9 +171,6 @@ function App() {
         }
       };
 
-      init();
-      animate();
-
       window.addEventListener("resize", function () {
         if (canvas) {
           canvas.width = this.window.innerWidth;
@@ -182,6 +179,9 @@ function App() {
           init();
         }
       });
+
+      init();
+      animate();
     }
   }, []);
 
