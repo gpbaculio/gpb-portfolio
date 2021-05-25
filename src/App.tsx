@@ -119,6 +119,7 @@ function App() {
         }
       };
 
+      //animation loop
       const animate = () => {
         requestAnimationFrame(animate);
         if (canvasCtx) {
@@ -128,6 +129,7 @@ function App() {
           }
         }
       };
+
       init();
       animate();
     }
