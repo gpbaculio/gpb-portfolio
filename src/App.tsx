@@ -26,6 +26,38 @@ function App() {
         mouse.x = event.x;
         mouse.y = event.y;
       });
+      class Particle {
+        x: number;
+        y: number;
+        directionX: number;
+        directionY: number;
+        size: number;
+        color: number;
+        constructor(
+          x: number,
+          y: number,
+          directionX: number,
+          directionY: number,
+          size: number,
+          color: number
+        ) {
+          this.x = x;
+          this.y = y;
+          this.directionX = directionX;
+          this.directionY = directionY;
+          this.size = size;
+          this.color = color;
+        }
+        // method to draw individual particle
+        draw() {
+          if (canvasCtx) {
+            canvasCtx.beginPath();
+            canvasCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+            canvasCtx.fillStyle = "#8c5523";
+            canvasCtx.fill();
+          }
+        }
+      }
     }
   }, []);
 
