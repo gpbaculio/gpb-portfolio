@@ -57,6 +57,17 @@ function App() {
             canvasCtx.fill();
           }
         }
+
+        //check particle position, check mouse position, move the particle, draw the particle
+        update() {
+          //check if particle is still within canvas, if it has, reverse direction x, y values in opposite direction
+          if (this.x > canvas.width || this.x < 0) {
+            this.directionX = -this.directionX;
+          }
+          if (this.y > canvas.height || this.y < 0) {
+            this.directionY = this.directionY;
+          }
+        }
       }
     }
   }, []);
