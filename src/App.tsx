@@ -173,6 +173,15 @@ function App() {
 
       init();
       animate();
+
+      window.addEventListener("resize", function () {
+        if (canvas) {
+          canvas.width = this.window.innerWidth;
+          canvas.height = this.window.innerHeight;
+          mouse.radius = (canvas.height / 80) * (canvas.height / 80);
+          init();
+        }
+      });
     }
   }, []);
 
