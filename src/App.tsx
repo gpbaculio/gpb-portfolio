@@ -68,7 +68,7 @@ function App() {
 
         //check particle position, check mouse position, move the particle, draw the particle
         update() {
-          if (mouse && mouse.x && mouse.y) {
+          if (mouse && mouse.x !== null && mouse.y !== null) {
             //check if particle is still within canvas, if it has, reverse direction x, y values in opposite direction
             if (this.x > canvas.width || this.x < 0) {
               this.directionX = -this.directionX;
@@ -137,6 +137,7 @@ function App() {
 
       // check if particles are close enough to draw lines between them
       const connect = () => {
+        let opacity = 1;
         if (canvasCtx && canvas) {
           for (let a = 0; a < particles.length; a++) {
             for (let b = a; b < particles.length; b++) {
@@ -147,7 +148,8 @@ function App() {
                   (particles[a].y - particles[b].y);
 
               if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                canvasCtx.strokeStyle = "rgba(140, 85, 31,1)";
+                opacity = 1 - distance / 20000;
+                canvasCtx.strokeStyle = `rgba(140, 85, 31, ${opacity})`;
                 canvasCtx.lineWidth = 1;
                 canvasCtx.beginPath();
                 canvasCtx.moveTo(particles[a].x, particles[a].y);
@@ -177,6 +179,14 @@ function App() {
           canvas.height = this.window.innerHeight;
           mouse.radius = (canvas.height / 80) * (canvas.height / 80);
           init();
+          animate();
+        }
+      });
+
+      window.addEventListener("mouseout", function () {
+        if (mouse && mouse.x && mouse.y) {
+          mouse.x = 0;
+          mouse.y = 0;
         }
       });
 
