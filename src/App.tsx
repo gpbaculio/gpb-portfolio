@@ -32,14 +32,14 @@ function App() {
         directionX: number;
         directionY: number;
         size: number;
-        color: number;
+        color: string;
         constructor(
           x: number,
           y: number,
           directionX: number,
           directionY: number,
           size: number,
-          color: number
+          color: string
         ) {
           this.x = x;
           this.y = y;
@@ -94,6 +94,25 @@ function App() {
 
             // draw particle
             this.draw();
+          }
+        }
+      }
+      function init() {
+        if (canvas) {
+          particles = [];
+          let particlesCount = (canvas.height * canvas.width) / 9000;
+          for (let i = 0; i < particlesCount; i++) {
+            let size = Math.random() * 5 + 1;
+            let x =
+              Math.random() * (innerWidth - size * 2 - size * 2) + size * 2;
+            let y =
+              Math.random() * (innerHeight - size * 2 - size * 2) + size * 2;
+            let directionX = Math.random() * 5 - 2.5;
+            let directionY = Math.random() * 5 - 2.5;
+            let color = "#8c5523";
+            particles.push(
+              new Particle(x, y, directionX, directionY, size, color)
+            );
           }
         }
       }
